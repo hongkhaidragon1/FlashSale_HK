@@ -1,0 +1,1133 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>⚡ FlashSale Shopee</title>
+
+<!-- Manrope (gần giống Lazada / Euclid Circular A) -->
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box}
+
+body{
+  font-family: "Manrope", sans-serif;
+  background:#f5f5f5;
+  margin:0;
+  padding:16px;
+}
+
+/* ===== TITLE ===== */
+h1{
+  text-align:center;
+  color:#ee4d2d;
+  font-size:36px; /* 👈 to gấp đôi */
+  margin-bottom:20px;
+}
+
+/* ===== FILTER PANEL ===== */
+.panel{
+  background:#fff;
+  padding:16px;
+  border-radius:12px;
+  margin-bottom:20px;
+
+  /* 👇 QUAN TRỌNG */
+  width: calc(
+    6 * ((100vw - 5 * clamp(10px,1.5vw,16px)) / 6)
+    + 5 * clamp(10px,1.5vw,16px)
+  );
+
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+.grid-filter{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:24px 40px;
+}
+.grid-filter > div{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+}
+
+label{
+  font-size:1.2vw;        /* 👈 to gấp đôi */
+  margin-bottom:8px;
+  text-align:left;
+}
+
+select,
+input{
+  width: calc(
+    2 * (100vw - 5 * clamp(10px,1.5vw,16px)) / 6
+  );                    /* 👈 = 2 card */
+
+  padding: 0.6em 0.8em; /* 👈 chiều cao theo chữ */
+  font-size: 1.2cqw;      /* 👈 chữ scale theo khung */
+
+  border:1px solid #dcdcdc;
+  border-radius:10px;
+  line-height:1.2;
+}
+
+
+
+/* ===== PRODUCT GRID ===== */
+.grid{
+  display:grid;
+  grid-template-columns: repeat(
+    6,
+    calc((100vw - 5 * clamp(10px,1.5vw,16px)) / 6)
+  );
+  gap:clamp(10px,1.5vw,16px);
+}
+
+
+/* Mobile */
+@media (max-width:1024px){
+
+  .panel{
+    width: 100%;
+  }
+
+  .grid{
+    width: 100%;
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .grid-filter{
+    grid-template-columns:1fr;
+  }
+
+  select,
+  input{
+    width: 100%;          /* 👈 QUAN TRỌNG */
+    font-size: 3rem;      /* chỉnh chữ tại đây */
+    padding: 0.7em 0.9em;
+  }
+
+  label{
+    font-size: 3rem;    /* chỉnh label tại đây */
+  }
+}
+
+
+
+
+/* ===== CARD ===== */
+.card{
+  background:#fff;
+  border-radius:15px;
+  padding:8px;                 /* cho card thở */
+  position:relative;
+
+  aspect-ratio:3 / 4.2;         /* cao hơn chút như bạn yêu cầu */
+  display:flex;
+  flex-direction:column;
+  container-type:inline-size;
+  border:3px solid #000;  
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;      /* 👈 bắt buộc */
+}
+
+
+/* Image */
+.card a{
+  width:100%;
+  aspect-ratio:1 / 1;
+  display:block;
+  padding:3%;              /* 👈 tạo khoảng hở đều */
+  box-sizing:border-box;
+}
+
+.card img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  border-radius:15px;
+}
+.card:hover{
+  transform: scale(1.04);       /* 👈 chuẩn, KHÔNG nên > 1.06 */
+  z-index: 5;                   /* 👈 tránh bị card khác đè */
+  box-shadow:0 14px 32px rgba(0,0,0,0.18);
+}
+
+/* Badge */
+.badge{
+  position:absolute;
+  top:8px;
+  left:8px;
+  background:#e60000;
+  color:#fff;
+  font-size:8cqw;
+  padding:0.25em 0.4em;
+  border-radius:6px;
+}
+
+.shop-badge{
+  position:absolute;
+  top:8px;
+  right:8px;
+  font-size:6cqw;
+  padding:0.25em 0.5em;
+  border-radius:6px;
+  font-weight:700;
+  color:#fff;              /* 👈 CHỮ TRẮNG */
+}
+
+.mall{
+  background:#d0011b;      /* 👈 ĐỎ ĐẬM (Mall) */
+}
+
+.preferred,
+.preferred-plus{
+  background:#ee4d2d;      /* 👈 CAM (Yêu thích) */
+}
+
+
+/* ===== TEXT TRONG SẢN PHẨM SCALE THEO CHIỀU RỘNG KHUNG ===== */
+
+.name{
+  font-size: clamp(16px, 8cqw, 36px);   /* ≈ 1/20 chiều rộng */
+  line-height:1.25;
+  margin:0.6em 0 0.8em;
+  height:2.6em;                         /* khóa 2 dòng */
+  overflow:hidden;
+  font-weight:1000;
+}
+
+.price{
+  font-size: clamp(16px, 10cqw, 44px);
+  font-weight:1000;
+  color:#d0011b;
+}
+
+.before{
+  font-size: clamp(16px, 8cqw, 36px);
+  text-decoration:line-through;
+  font-weight:1000;
+  color:#999;
+  margin-left:0.4em;
+}
+
+.meta{
+  font-size: clamp(16px, 7cqw, 36px);
+  color:#666;
+  margin-top:0.8em;
+  margin-bottom:0.2em;   /* 👈 GIÃN XUỐNG DƯỚI */
+
+  display:flex;
+  flex-direction:column;
+  gap:0.4em;
+}
+
+/* ===== TO TOP BUTTON ===== */
+#toTop{
+  position:fixed;
+  bottom:32px;
+  right:32px;
+
+  width:150px;
+  height:150px;
+  border-radius:50%;
+
+  background:#1e71ff;
+  color:#fff;
+  border:none;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:120px;        /* 👈 GIẢM 1 CHÚT */
+  line-height:1;          /* 👈 QUAN TRỌNG */
+  cursor:pointer;
+  display:none;
+
+  box-shadow:0 10px 30px rgba(0,0,0,.3);
+  z-index:999;
+}
+
+
+#toTop:hover{
+  background:#d43c1f;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Flashsale Shopee</h1>
+
+<form class="panel" method="get">
+  <div class="grid-filter">
+
+    <div>
+      <label>Chọn khung giờ</label>
+      <select name="slot" onchange="this.form.submit()">
+        
+      </select>
+    </div>
+
+    <div>
+      <label>Tìm kiếm sản phẩm</label>
+      <input name="q" value="">
+    </div>
+
+    <div>
+      <label>Sắp xếp theo</label>
+      <select name="sort" onchange="this.form.submit()">
+        <option value="discount" selected>Theo phần trăm</option>
+        <option value="price_asc" >Giá tăng dần</option>
+        <option value="price_desc" >Giá giảm dần</option>
+      </select>
+    </div>
+
+    <div>
+      <label>Lọc theo</label>
+        <select name="filter" onchange="this.form.submit()">
+          <option value="all" selected>
+            Mọi sản phẩm
+          </option>
+          <option value="mall" >
+            Shop Mall
+          </option>
+          <option value="remove_1k" >
+            Bỏ Deal 1K
+          </option>
+          <option value="rating49" >
+            Trên 4.9⭐
+          </option>
+        </select>
+    </div>
+
+  </div>
+</form>
+
+<div class="grid">
+
+  <div class="card">
+    <div class="badge">-99%</div>
+    
+      <div class="shop-badge mall">Mall</div>
+    
+    <a href="https://shopee.vn/product/401304105/43723946055" target="_blank"><img src="https://cf.shopee.vn/file/vn-11134207-820l4-mfs66dmavbwv40"></a>
+    <div class="name">Sách: Kiến Tạo Dòng Chảy - Tối Ưu Hiệu Suất Tối Đa Thành Tích</div>
+    <div>
+      <span class="price">1,000₫</span>
+      <span class="before">72,000₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 100</div>
+      <div>    ⭐ 4.98/5 (108 đánh giá)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge">-97%</div>
+    
+      <div class="shop-badge preferred">Yêu thích</div>
+    
+    <a href="https://shopee.vn/product/163471961/5362683985" target="_blank"><img src="https://cf.shopee.vn/file/72aa916bc358a315cd03b3d9b13ca23e"></a>
+    <div class="name">Combo 3 chiếc Bàn Chải Đánh Răng Muji (Hộp 3 Chiếc)</div>
+    <div>
+      <span class="price">1,000₫</span>
+      <span class="before">30,000₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 28</div>
+      <div>    ⭐ 4.86/5 (5634 đánh giá)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge">-97%</div>
+    
+      <div class="shop-badge preferred-plus">Yêu thích +</div>
+    
+    <a href="https://shopee.vn/product/468090373/24709582664" target="_blank"><img src="https://cf.shopee.vn/file/vn-11134207-7ra0g-m7sx64p4hvlf32"></a>
+    <div class="name">COMBO 500 Màng Bọc Thực Phẩm PE Hình Gấu Có Chun Bo Tái Sử Dụng Được Nhiều Lần</div>
+    <div>
+      <span class="price">1,000₫</span>
+      <span class="before">30,000₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 28</div>
+      <div>    ⭐ 4.94/5 (534 đánh giá)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge">-97%</div>
+    
+      <div class="shop-badge mall">Mall</div>
+    
+    <a href="https://shopee.vn/product/549441275/22929498115" target="_blank"><img src="https://cf.shopee.vn/file/vn-11134207-7ra0g-m73d30u64n1d7a"></a>
+    <div class="name">Sách Những Câu Chuyện Truyền Cảm Hứng: Học Cách Yêu Thương - Bản màu</div>
+    <div>
+      <span class="price">1,000₫</span>
+      <span class="before">36,000₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 70</div>
+      <div>    ⭐ 4.88/5 (1686 đánh giá)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge">-97%</div>
+    
+    <a href="https://shopee.vn/product/1663771877/52152093488" target="_blank"><img src="https://cf.shopee.vn/file/sg-11134201-8227z-mhhz4gvm1vk28e"></a>
+    <div class="name">Combo 3 hộp lớn 500 que tăm bông y tế, tăm bông trang điểm, spa, bông ngoáy tai que gỗ 2 đầu 9 ( xoắn và tròn)</div>
+    <div>
+      <span class="price">1,000₫</span>
+      <span class="before">30,000₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 30</div>
+      <div>    ⭐ 4.96/5 (25 đánh giá)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge">-96%</div>
+    
+      <div class="shop-badge preferred">Yêu thích</div>
+    
+    <a href="https://shopee.vn/product/157224604/23571820201" target="_blank"><img src="https://cf.shopee.vn/file/vn-11134207-7qukw-lie8zo5d7jt808"></a>
+    <div class="name">Sáp thơm phòng khử mùi có 6 hương thơm dịu nhẹ cho phòng ngủ, nhà vệ sinh, ô tô, tủ quần áo 88408</div>
+    <div>
+      <span class="price">1,000₫</span>
+      <span class="before">25,000₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 28</div>
+      <div>    ⭐ 4.52/5 (27496 đánh giá)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge">-95%</div>
+    
+      <div class="shop-badge preferred">Yêu thích</div>
+    
+    <a href="https://shopee.vn/product/736310845/25019336573" target="_blank"><img src="https://cf.shopee.vn/file/vn-11134201-7r98o-lya8n4qz8wgdae"></a>
+    <div class="name">Viên tẩy bồn cầu COMB0 50 VIÊN Viên thả bồn cầu khử mùi hôi sạch mảng bám vi khuẩn viên thả toilet SIGO</div>
+    <div>
+      <span class="price">1,000₫</span>
+      <span class="before">19,000₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 33</div>
+      <div>    ⭐ 4.86/5 (2500 đánh giá)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge">-95%</div>
+    
+      <div class="shop-badge preferred-plus">Yêu thích +</div>
+    
+    <a href="https://shopee.vn/product/37778998/25907928864" target="_blank"><img src="https://cf.shopee.vn/file/vn-11134207-7r98o-lwjjp3n47h0bff"></a>
+    <div class="name">( Tặng Keo ) Búp Bê Nhỏ Dễ Thương Trang Trí Biển Số Xe Hơi xe máy, Điện Thoại, Màn hình máy tính, Tai gương, góc vuông</div>
+    <div>
+      <span class="price">1,000₫</span>
+      <span class="before">20,000₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 10</div>
+      <div>    ⭐ 4.87/5 (5629 đánh giá)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge">-95%</div>
+    
+      <div class="shop-badge preferred">Yêu thích</div>
+    
+    <a href="https://shopee.vn/product/1160265072/24908459171" target="_blank"><img src="https://cf.shopee.vn/file/vn-11134211-7ra0g-m7ca3tylahbn74"></a>
+    <div class="name">Túi Rác Tự Phân Hủy - Bao Rác Đen Kích Thước Lớn 55*65 cm 1 cuộn</div>
+    <div>
+      <span class="price">1,000₫</span>
+      <span class="before">18,500₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 35</div>
+      <div>    ⭐ 4.71/5 (4841 đánh giá)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge">-95%</div>
+    
+      <div class="shop-badge mall">Mall</div>
+    
+    <a href="https://shopee.vn/product/1021396369/26173173856" target="_blank"><img src="https://cf.shopee.vn/file/vn-11134207-7ras8-m4u3r3e1eqyr23"></a>
+    <div class="name">Bút Bi Mực Gel Deli Thân Mờ Trong Suốt màu đen đỏ xanh ngòi 0.5mm viết trơn mực đều</div>
+    <div>
+      <span class="price">1,000₫</span>
+      <span class="before">20,000₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 30</div>
+      <div>    ⭐ 4.89/5 (5833 đánh giá)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge">-95%</div>
+    
+      <div class="shop-badge preferred">Yêu thích</div>
+    
+    <a href="https://shopee.vn/product/471619959/20038112672" target="_blank"><img src="https://cf.shopee.vn/file/cc52f293cebd029c2ee6d84668c8e445"></a>
+    <div class="name">Khăn mặt khô Animerry dùng 1 lần lau khô, lau ướt , Giấy lau mặt dùng một lần</div>
+    <div>
+      <span class="price">1,000₫</span>
+      <span class="before">20,000₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 28</div>
+      <div>    ⭐ 4.61/5 (8759 đánh giá)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge">-95%</div>
+    
+      <div class="shop-badge preferred">Yêu thích</div>
+    
+    <a href="https://shopee.vn/product/1303178546/29455161536" target="_blank"><img src="https://cf.shopee.vn/file/vn-11134207-7r98o-lxnfysx2y7yx55"></a>
+    <div class="name">Giấy ăn gấu trúc Top Gia khăn giấy rút  gói tiện lợi thận thiện môi trường mềm mịn tiết kiệm</div>
+    <div>
+      <span class="price">1,000₫</span>
+      <span class="before">20,000₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 28</div>
+      <div>    ⭐ 4.95/5 (652 đánh giá)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge">-95%</div>
+    
+      <div class="shop-badge preferred-plus">Yêu thích +</div>
+    
+    <a href="https://shopee.vn/product/44459631/23659534722" target="_blank"><img src="https://cf.shopee.vn/file/vn-11134207-7ras8-m2vvn45bp5v4da"></a>
+    <div class="name">Lược Chải Tóc Tạo Kiểu Thiết Kế Hình Vòng Cung</div>
+    <div>
+      <span class="price">1,000₫</span>
+      <span class="before">20,000₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 30</div>
+      <div>    ⭐ 4.91/5 (2283 đánh giá)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge">-95%</div>
+    
+      <div class="shop-badge preferred">Yêu thích</div>
+    
+    <a href="https://shopee.vn/product/577452794/53400479386" target="_blank"><img src="https://cf.shopee.vn/file/vn-11134207-820l4-mgg3wrl41xjha4"></a>
+    <div class="name">[100 Mẫu] Bao Lì Xì Truyền Thống 2026 - Giấy 150gsm Chất Lượng Cao -D16m x R8cm. Phù Hợp Mọi Mệnh Giá,Dán Đáy Trong.</div>
+    <div>
+      <span class="price">1,000₫</span>
+      <span class="before">20,000₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 54</div>
+      <div>    ⭐ 4.93/5 (1929 đánh giá)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge">-95%</div>
+    
+      <div class="shop-badge preferred-plus">Yêu thích +</div>
+    
+    <a href="https://shopee.vn/product/129892489/9084018109" target="_blank"><img src="https://cf.shopee.vn/file/vn-11134211-7ras8-m3q79roe9osc60"></a>
+    <div class="name">Giấy note vuông nhiều hình ảnh 30 tờ (6x6 cm) - Giấy ghi chú</div>
+    <div>
+      <span class="price">1,000₫</span>
+      <span class="before">20,000₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 15</div>
+      <div>    ⭐ 4.98/5 (48 đánh giá)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge">-94%</div>
+    
+      <div class="shop-badge preferred">Yêu thích</div>
+    
+    <a href="https://shopee.vn/product/898061460/25422794850" target="_blank"><img src="https://cf.shopee.vn/file/vn-11134211-7r98o-lttrvk1fut5924"></a>
+    <div class="name">Vỉ 10 Đôi Đũa Nhựa Kháng Khuẩn Xoắn 2 Đầu Chống Trượt, Sang Trọng Chất Lượng Cao</div>
+    <div>
+      <span class="price">1,000₫</span>
+      <span class="before">16,000₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 20</div>
+      <div>    ⭐ 4.59/5 (382 đánh giá)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge">-91%</div>
+    
+      <div class="shop-badge mall">Mall</div>
+    
+    <a href="https://shopee.vn/product/401304105/40553318381" target="_blank"><img src="https://cf.shopee.vn/file/vn-11134207-7ras8-mamivmmpv1lk96"></a>
+    <div class="name">Sách - Niềm Vui Công Việc - Bộ Công Cụ Này Hiệu Quả Duy Trì Niềm Vui Công Việc</div>
+    <div>
+      <span class="price">9,450₫</span>
+      <span class="before">105,000₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 100</div>
+      <div>    ⭐ 4.97/5 (107 đánh giá)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge">-82%</div>
+    
+      <div class="shop-badge preferred">Yêu thích</div>
+    
+    <a href="https://shopee.vn/product/935294565/20574771962" target="_blank"><img src="https://cf.shopee.vn/file/vn-11134207-7ras8-mavd3cx76yz03c"></a>
+    <div class="name">[Set 100 Cái] Khẩu Trang 5D THỊNH PHÁT Đủ Màu Chính Hãng, 3 Lớp Kháng Khuẩn Dễ Thở, Chống Bụi Mịn</div>
+    <div>
+      <span class="price">9,000₫</span>
+      <span class="before">50,000₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 28</div>
+      <div>    ⭐ 4.87/5 (9137 đánh giá)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge">-82%</div>
+    
+      <div class="shop-badge preferred-plus">Yêu thích +</div>
+    
+    <a href="https://shopee.vn/product/4684399/3917311161" target="_blank"><img src="https://cf.shopee.vn/file/2914ed340506463159d3dc8ae7b40e41"></a>
+    <div class="name">Nước hoa TOP COUNTRY THAILAND - Phiên bản mini</div>
+    <div>
+      <span class="price">9,000₫</span>
+      <span class="before">50,000₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 28</div>
+      <div>    ⭐ 4.91/5 (595 đánh giá)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge">-77%</div>
+    
+      <div class="shop-badge preferred-plus">Yêu thích +</div>
+    
+    <a href="https://shopee.vn/product/468090373/29457429075" target="_blank"><img src="https://cf.shopee.vn/file/vn-11134207-7ra0g-m7sxb9xffmere9"></a>
+    <div class="name">Túi đựng rác Sinh Học [ túi dày, dai 55x65CM ]  chất liệu nilon tự huỷ sinh học - tiện dụng, tiết kiệm</div>
+    <div>
+      <span class="price">8,970₫</span>
+      <span class="before">39,000₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 28</div>
+      <div>    ⭐ 4.8/5 (2149 đánh giá)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge">-75%</div>
+    
+      <div class="shop-badge preferred">Yêu thích</div>
+    
+    <a href="https://shopee.vn/product/30674096/12432261294" target="_blank"><img src="https://cf.shopee.vn/file/vn-11134207-7r98o-lytqnfkgzqkt42"></a>
+    <div class="name">Kính cường lực iphone chống nhìn trộm kk khung tự dán tự hút bụi ip 7/8X/Xsmax/11/12/13/14/15/16/17/pro/max/promax/plus</div>
+    <div>
+      <span class="price">8,750₫</span>
+      <span class="before">35,000₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 5452</div>
+      <div>    ⭐ 4.57/5 (24878 đánh giá)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge">-71%</div>
+    
+      <div class="shop-badge mall">Mall</div>
+    
+    <a href="https://shopee.vn/product/500024302/29453106730" target="_blank"><img src="https://cf.shopee.vn/file/vn-11134207-7r98o-lxgg4js82lln94"></a>
+    <div class="name">( Loại 1)  Quạt tích điện kẹp bàn mini để bàn 5 mức độ có đèn led pin 5000 MHA Và 10000 MHA cao cấp</div>
+    <div>
+      <span class="price">63,510₫</span>
+      <span class="before">219,000₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 48</div>
+      <div>    ⭐ 4.5/5 (16734 đánh giá)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge">-70%</div>
+    
+      <div class="shop-badge preferred">Yêu thích</div>
+    
+    <a href="https://shopee.vn/product/758905763/44166527458" target="_blank"><img src="https://cf.shopee.vn/file/vn-11134207-820l4-mff8ar8absp99d"></a>
+    <div class="name">Nước Rửa Chén Thơm Sạch Kin Kít Toop Clean 400ml và 1L - Tinh Chất Thảo Mộc, An Toàn Da Tay</div>
+    <div>
+      <span class="price">9,000₫</span>
+      <span class="before">30,000₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 14</div>
+      <div>    ⭐ 4.95/5 (575 đánh giá)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge">-64%</div>
+    
+      <div class="shop-badge preferred">Yêu thích</div>
+    
+    <a href="https://shopee.vn/product/935294565/23829295018" target="_blank"><img src="https://cf.shopee.vn/file/vn-11134207-7ras8-mal2jh5c68jlb2"></a>
+    <div class="name">[Set 200 Cái] Khẩu Trang THỊNH PHÁT 5D Mask Chính Hãng, Hàng Tiêu Chuẩn 3 Lớp Dễ Thở Kháng Khuẩn</div>
+    <div>
+      <span class="price">28,800₫</span>
+      <span class="before">80,000₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 33</div>
+      <div>    ⭐ 4.83/5 (1435 đánh giá)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge">-58%</div>
+    
+    <a href="https://shopee.vn/product/141049491/18795677983" target="_blank"><img src="https://cf.shopee.vn/file/vn-11134207-820l4-mhssx2amsmps4f"></a>
+    <div class="name">Kèn Melodica 32 Phím – Âm Chuẩn – Dễ Thổi – Full Phụ Kiện – Túi + Ống Thổi Ngắn Dài – Cho Bé</div>
+    <div>
+      <span class="price">25,200₫</span>
+      <span class="before">60,000₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 1000</div>
+      <div>    ⭐ 4.87/5 (4075 đánh giá)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge">-58%</div>
+    
+      <div class="shop-badge preferred">Yêu thích</div>
+    
+    <a href="https://shopee.vn/product/289702258/25816036037" target="_blank"><img src="https://cf.shopee.vn/file/vn-11134207-7r98o-lsbloxqtgx3tbd"></a>
+    <div class="name">Dép YZ slide 3 màu basic vân nhám đế cao bản full cao cấp dành cho Nam và Nữ</div>
+    <div>
+      <span class="price">105,000₫</span>
+      <span class="before">250,000₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 1800</div>
+      <div>    ⭐ 4.82/5 (2251 đánh giá)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge">-52%</div>
+    
+      <div class="shop-badge preferred">Yêu thích</div>
+    
+    <a href="https://shopee.vn/product/48284943/22429815525" target="_blank"><img src="https://cf.shopee.vn/file/vn-11134207-820l4-mgbt0lnpo7bi4e"></a>
+    <div class="name">Cáp Sạc Nhanh PD 20w Dài 2M, 1M Dây Sạc Nhanh Dù Chống Đứt Dùng Cho Củ Cạc Nhanh ip Type C To Light</div>
+    <div>
+      <span class="price">28,800₫</span>
+      <span class="before">60,000₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 20</div>
+      <div>    ⭐ 4.81/5 (6195 đánh giá)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge">-51%</div>
+    
+      <div class="shop-badge preferred-plus">Yêu thích +</div>
+    
+    <a href="https://shopee.vn/product/341325550/26850326066" target="_blank"><img src="https://cf.shopee.vn/file/vn-11134207-7ra0g-madn3nk3jtttde"></a>
+    <div class="name">[MUA 2 GIẢM 50%] Body Mist Unisex Hẹn Hò Xịt Thơm Toàn Thân Nước Hoa Nam Nữ BODYMISS (Chai)</div>
+    <div>
+      <span class="price">115,640₫</span>
+      <span class="before">236,000₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 1700</div>
+      <div>    ⭐ 4.84/5 (27627 đánh giá)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge">-49%</div>
+    
+      <div class="shop-badge preferred-plus">Yêu thích +</div>
+    
+    <a href="https://shopee.vn/product/34279518/18080229028" target="_blank"><img src="https://cf.shopee.vn/file/vn-11134207-820l4-mgollb3jfpxn48"></a>
+    <div class="name">Rèm cửa dán tường chống nắng, rèm cửa trang trí cửa sổ - phòng khách dễ dàng lắp đặt không khoan đục</div>
+    <div>
+      <span class="price">28,050₫</span>
+      <span class="before">55,000₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 1220</div>
+      <div>    ⭐ 4.83/5 (29553 đánh giá)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge">-48%</div>
+    
+      <div class="shop-badge preferred">Yêu thích</div>
+    
+    <a href="https://shopee.vn/product/196261835/44300946588" target="_blank"><img src="https://cf.shopee.vn/file/sg-11134201-8225m-mhre6q2sjn5yd0"></a>
+    <div class="name">Lông Tơ Tự Nhiên Bun Tóc Giả Cho Nữ - Đuôi Xộn, Nụ Hoa, Kẹp Tóc, Râu Dài & Vòng Tóc</div>
+    <div>
+      <span class="price">37,066₫</span>
+      <span class="before">71,280₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 45</div>
+      <div>    ⭐ 4.93/5 (3589 đánh giá)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge">-46%</div>
+    
+      <div class="shop-badge mall">Mall</div>
+    
+    <a href="https://shopee.vn/product/254666730/20884333124" target="_blank"><img src="https://cf.shopee.vn/file/vn-11134207-7r98o-ly32cokctpllee"></a>
+    <div class="name">[Mã ELBSJBP03 giảm 12% đơn 500K] Bếp điện từ Elmich ICE 3879</div>
+    <div>
+      <span class="price">1,133,460₫</span>
+      <span class="before">2,099,000₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 30</div>
+      <div>    ⭐ 4.9/5 (1208 đánh giá)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge">-46%</div>
+    
+    <a href="https://shopee.vn/product/421392023/21086280652" target="_blank"><img src="https://cf.shopee.vn/file/vn-11134207-7r98o-lo51ushb454n7c"></a>
+    <div class="name">Thùng 100 chiếc khẩu trang 5D Loka mask kháng khuẩn 3 lớp nhiều màu</div>
+    <div>
+      <span class="price">27,000₫</span>
+      <span class="before">50,000₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 150</div>
+      <div>    ⭐ 4.77/5 (3103 đánh giá)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge">-46%</div>
+    
+      <div class="shop-badge preferred">Yêu thích</div>
+    
+    <a href="https://shopee.vn/product/1278576601/29953065043" target="_blank"><img src="https://cf.shopee.vn/file/vn-11134207-820l4-mdzvgt7f7g1ubb"></a>
+    <div class="name">[CUỘN TO] Cuộn 200 Khăn Giấy Vải Lau Đa Năng, Khăn Lau Bếp, Siêu Thấm Hút Có Thể Tái Sử Dụng</div>
+    <div>
+      <span class="price">18,900₫</span>
+      <span class="before">35,000₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 720</div>
+      <div>    ⭐ 4.81/5 (3914 đánh giá)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge">-45%</div>
+    
+      <div class="shop-badge mall">Mall</div>
+    
+    <a href="https://shopee.vn/product/254666730/26913474088" target="_blank"><img src="https://cf.shopee.vn/file/vn-11134207-820l4-mhtypx4djmyue2"></a>
+    <div class="name">Bộ nồi inox nguyên khối Elmich Trimax EL-2136OL04 size 18, 20, 22 chảo 24cm</div>
+    <div>
+      <span class="price">1,974,500₫</span>
+      <span class="before">3,590,000₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 30</div>
+      <div>    ⭐ 4.9/5 (1148 đánh giá)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge">-37%</div>
+    
+      <div class="shop-badge preferred">Yêu thích</div>
+    
+    <a href="https://shopee.vn/product/399967658/20086069679" target="_blank"><img src="https://cf.shopee.vn/file/vn-11134207-7r98o-lnp9zh04dlnxa0"></a>
+    <div class="name">giá treo khăn dán tường có thể gấp gọn tiện lợi, giá đỡ thau chậu gắn tường GD1001</div>
+    <div>
+      <span class="price">18,900₫</span>
+      <span class="before">30,000₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 100</div>
+      <div>    ⭐ 4.35/5 (5448 đánh giá)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge">-36%</div>
+    
+    <a href="https://shopee.vn/product/208065457/27822207596" target="_blank"><img src="https://cf.shopee.vn/file/vn-11134207-7ras8-m36hyn5ohzakc7"></a>
+    <div class="name">Kẹo bi trái cây 300G - bánh kẹo Tết đồ ăn vặt</div>
+    <div>
+      <span class="price">16,000₫</span>
+      <span class="before">25,000₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 10</div>
+      <div>    ⭐ 4.93/5 (649 đánh giá)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge">-35%</div>
+    
+      <div class="shop-badge mall">Mall</div>
+    
+    <a href="https://shopee.vn/product/98434606/40961818297" target="_blank"><img src="https://cf.shopee.vn/file/vn-11134207-820l4-mhpkb22gkrgh5e"></a>
+    <div class="name">Áo Sweater Thêu Len GUPO Tay Phồng Form Boxy Chất Nỉ Bông Dày Dặn Local Brand Unisex - SWT01</div>
+    <div>
+      <span class="price">227,500₫</span>
+      <span class="before">350,000₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 172</div>
+      <div>    ⭐ 4.91/5 (383 đánh giá)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge">-33%</div>
+    
+      <div class="shop-badge mall">Mall</div>
+    
+    <a href="https://shopee.vn/product/254666730/18763925802" target="_blank"><img src="https://cf.shopee.vn/file/vn-11134207-7r98o-ls31ghv0fkbd01"></a>
+    <div class="name">Quánh Inox nguyên khối Elmich baby EL-3848/2538IN14 size 14cm</div>
+    <div>
+      <span class="price">442,200₫</span>
+      <span class="before">660,000₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 30</div>
+      <div>    ⭐ 4.92/5 (3205 đánh giá)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge">-29%</div>
+    
+      <div class="shop-badge mall">Mall</div>
+    
+    <a href="https://shopee.vn/product/987373161/26753987726" target="_blank"><img src="https://cf.shopee.vn/file/sg-11134201-822xt-mi6uw73eyvwk7c"></a>
+    <div class="name">[LS][Chọn loại] Combo 2 Túi Nước Giặt Xả Chanté Cao Cấp 8 Trong 1</div>
+    <div>
+      <span class="price">205,190₫</span>
+      <span class="before">289,000₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 150</div>
+      <div>    ⭐ 4.92/5 (24287 đánh giá)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge">-25%</div>
+    
+      <div class="shop-badge preferred">Yêu thích</div>
+    
+    <a href="https://shopee.vn/product/689783153/21447965154" target="_blank"><img src="https://cf.shopee.vn/file/vn-11134207-7r98o-lvrar1kmg7sp4b"></a>
+    <div class="name">Giấy lau sàn tẩy rửa sàn nhà có 5 mùi hương ( 30 miếng/gói)</div>
+    <div>
+      <span class="price">14,925₫</span>
+      <span class="before">19,900₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 110</div>
+      <div>    ⭐ 4.74/5 (4542 đánh giá)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge">-24%</div>
+    
+      <div class="shop-badge preferred">Yêu thích</div>
+    
+    <a href="https://shopee.vn/product/534462409/17357336645" target="_blank"><img src="https://cf.shopee.vn/file/d15494bc461750e54821c67c11290b5c"></a>
+    <div class="name">Chảo chống dính hợp kim nhôm CV House đủ size</div>
+    <div>
+      <span class="price">68,400₫</span>
+      <span class="before">90,000₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 300</div>
+      <div>    ⭐ 4.77/5 (8520 đánh giá)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge">-16%</div>
+    
+      <div class="shop-badge preferred">Yêu thích</div>
+    
+    <a href="https://shopee.vn/product/233958535/7167929427" target="_blank"><img src="https://cf.shopee.vn/file/vn-11134207-820l4-mg57frp5itqj7a"></a>
+    <div class="name">Khăn Tắm, Gội, Lau Mặt Châu Âu LOTUS 100% Cotton Mềm Mịn Thấm Hút Dùng Cho Gia Đình Spa Khách Sạn</div>
+    <div>
+      <span class="price">15,960₫</span>
+      <span class="before">19,000₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 10000</div>
+      <div>    ⭐ 4.76/5 (55539 đánh giá)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge">-11%</div>
+    
+    <a href="https://shopee.vn/product/120420833/22257690675" target="_blank"><img src="https://cf.shopee.vn/file/vn-11134207-7r98o-lmrrup322hgf34"></a>
+    <div class="name">Chăn Lông Thỏ COCO 2m3x2m Siêu Ấm Đại Hàn nặng 4kg mẫu hot trend 2023</div>
+    <div>
+      <span class="price">209,150₫</span>
+      <span class="before">235,000₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 390</div>
+      <div>    ⭐ 4.43/5 (9589 đánh giá)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge">-10%</div>
+    
+      <div class="shop-badge preferred">Yêu thích</div>
+    
+    <a href="https://shopee.vn/product/541441955/42958229565" target="_blank"><img src="https://cf.shopee.vn/file/vn-11134207-7ras8-mc3040yn59wydd"></a>
+    <div class="name">Máy kẹp - duỗi tóc mini hình thú có hộp nhựa đựng</div>
+    <div>
+      <span class="price">26,100₫</span>
+      <span class="before">29,000₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 150</div>
+      <div>    ⭐ 4.75/5 (2782 đánh giá)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge">-5%</div>
+    
+      <div class="shop-badge preferred">Yêu thích</div>
+    
+    <a href="https://shopee.vn/product/422714436/15102451349" target="_blank"><img src="https://cf.shopee.vn/file/vn-11134207-7r98o-m06uif8xvvfxb2"></a>
+    <div class="name">Combo 60 gói Snack Sườn Dê Nướng Hằng Đại, Pò Miếng Hằng Đại Mini, Đồ Ăn Vặt Cổng Trường Tuổi Thơ Siêu Cay Siêu Hot</div>
+    <div>
+      <span class="price">18,525₫</span>
+      <span class="before">19,500₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 300</div>
+      <div>    ⭐ 4.84/5 (14239 đánh giá)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge">-5%</div>
+    
+      <div class="shop-badge preferred-plus">Yêu thích +</div>
+    
+    <a href="https://shopee.vn/product/97978854/24254793528" target="_blank"><img src="https://cf.shopee.vn/file/vn-11134207-7r98o-lqrwrlegnrcnb0"></a>
+    <div class="name">Quần Jean Nam Dáng Baggy Ống Suông Màu Xanh Retro Chất Vải Dày Dặn Phối Wash The Jeans</div>
+    <div>
+      <span class="price">189,050₫</span>
+      <span class="before">199,000₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 1400</div>
+      <div>    ⭐ 4.85/5 (5712 đánh giá)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge">-3%</div>
+    
+      <div class="shop-badge preferred">Yêu thích</div>
+    
+    <a href="https://shopee.vn/product/144529952/20057627105" target="_blank"><img src="https://cf.shopee.vn/file/vn-11134207-7r98o-lmnbfmzrlqsf03"></a>
+    <div class="name">Bao giá Shopee - Bút bi mực gel văn phòng Chép Kinh ngòi 0.5mm nét chữ đẹp viết chơn chu đều nét đủ màu xanh đen đỏ B18</div>
+    <div>
+      <span class="price">11,640₫</span>
+      <span class="before">12,000₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 600</div>
+      <div>    ⭐ 4.73/5 (12986 đánh giá)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge">-1%</div>
+    
+      <div class="shop-badge preferred">Yêu thích</div>
+    
+    <a href="https://shopee.vn/product/24909781/3407755600" target="_blank"><img src="https://cf.shopee.vn/file/vn-11134207-7ras8-m0i9k0z1s1hr69"></a>
+    <div class="name">Set 6 quả châu phủ nhũ kim tuyến Size 10/8/6/4cm loại đẹp Cao Cấp trang trí Noel giáng sinh , phụ kiện trang trí cây thô</div>
+    <div>
+      <span class="price">15,840₫</span>
+      <span class="before">16,000₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 100</div>
+      <div>    ⭐ 4.62/5 (3716 đánh giá)</div>
+    </div>
+  </div>
+
+</div>
+
+<button id="toTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">▲</button>
+
+<script>
+const btn = document.getElementById("toTop");
+window.addEventListener("scroll", () => {
+  btn.style.display = window.scrollY > 400 ? "block" : "none";
+});
+</script>
+
+</body>
+</html>

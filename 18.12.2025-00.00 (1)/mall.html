@@ -1,0 +1,497 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>⚡ FlashSale Shopee</title>
+
+<!-- Manrope (gần giống Lazada / Euclid Circular A) -->
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box}
+
+body{
+  font-family: "Manrope", sans-serif;
+  background:#f5f5f5;
+  margin:0;
+  padding:16px;
+}
+
+/* ===== TITLE ===== */
+h1{
+  text-align:center;
+  color:#ee4d2d;
+  font-size:36px; /* 👈 to gấp đôi */
+  margin-bottom:20px;
+}
+
+/* ===== FILTER PANEL ===== */
+.panel{
+  background:#fff;
+  padding:16px;
+  border-radius:12px;
+  margin-bottom:20px;
+
+  /* 👇 QUAN TRỌNG */
+  width: calc(
+    6 * ((100vw - 5 * clamp(10px,1.5vw,16px)) / 6)
+    + 5 * clamp(10px,1.5vw,16px)
+  );
+
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+.grid-filter{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:24px 40px;
+}
+.grid-filter > div{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+}
+
+label{
+  font-size:1.2vw;        /* 👈 to gấp đôi */
+  margin-bottom:8px;
+  text-align:left;
+}
+
+select,
+input{
+  width: calc(
+    2 * (100vw - 5 * clamp(10px,1.5vw,16px)) / 6
+  );                    /* 👈 = 2 card */
+
+  padding: 0.6em 0.8em; /* 👈 chiều cao theo chữ */
+  font-size: 1.2cqw;      /* 👈 chữ scale theo khung */
+
+  border:1px solid #dcdcdc;
+  border-radius:10px;
+  line-height:1.2;
+}
+
+
+
+/* ===== PRODUCT GRID ===== */
+.grid{
+  display:grid;
+  grid-template-columns: repeat(
+    6,
+    calc((100vw - 5 * clamp(10px,1.5vw,16px)) / 6)
+  );
+  gap:clamp(10px,1.5vw,16px);
+}
+
+
+/* Mobile */
+@media (max-width:1024px){
+
+  .panel{
+    width: 100%;
+  }
+
+  .grid{
+    width: 100%;
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .grid-filter{
+    grid-template-columns:1fr;
+  }
+
+  select,
+  input{
+    width: 100%;          /* 👈 QUAN TRỌNG */
+    font-size: 3rem;      /* chỉnh chữ tại đây */
+    padding: 0.7em 0.9em;
+  }
+
+  label{
+    font-size: 3rem;    /* chỉnh label tại đây */
+  }
+}
+
+
+
+
+/* ===== CARD ===== */
+.card{
+  background:#fff;
+  border-radius:15px;
+  padding:8px;                 /* cho card thở */
+  position:relative;
+
+  aspect-ratio:3 / 4.2;         /* cao hơn chút như bạn yêu cầu */
+  display:flex;
+  flex-direction:column;
+  container-type:inline-size;
+  border:3px solid #000;  
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;      /* 👈 bắt buộc */
+}
+
+
+/* Image */
+.card a{
+  width:100%;
+  aspect-ratio:1 / 1;
+  display:block;
+  padding:3%;              /* 👈 tạo khoảng hở đều */
+  box-sizing:border-box;
+}
+
+.card img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  border-radius:15px;
+}
+.card:hover{
+  transform: scale(1.04);       /* 👈 chuẩn, KHÔNG nên > 1.06 */
+  z-index: 5;                   /* 👈 tránh bị card khác đè */
+  box-shadow:0 14px 32px rgba(0,0,0,0.18);
+}
+
+/* Badge */
+.badge{
+  position:absolute;
+  top:8px;
+  left:8px;
+  background:#e60000;
+  color:#fff;
+  font-size:8cqw;
+  padding:0.25em 0.4em;
+  border-radius:6px;
+}
+
+.shop-badge{
+  position:absolute;
+  top:8px;
+  right:8px;
+  font-size:6cqw;
+  padding:0.25em 0.5em;
+  border-radius:6px;
+  font-weight:700;
+  color:#fff;              /* 👈 CHỮ TRẮNG */
+}
+
+.mall{
+  background:#d0011b;      /* 👈 ĐỎ ĐẬM (Mall) */
+}
+
+.preferred,
+.preferred-plus{
+  background:#ee4d2d;      /* 👈 CAM (Yêu thích) */
+}
+
+
+/* ===== TEXT TRONG SẢN PHẨM SCALE THEO CHIỀU RỘNG KHUNG ===== */
+
+.name{
+  font-size: clamp(16px, 8cqw, 36px);   /* ≈ 1/20 chiều rộng */
+  line-height:1.25;
+  margin:0.6em 0 0.8em;
+  height:2.6em;                         /* khóa 2 dòng */
+  overflow:hidden;
+  font-weight:1000;
+}
+
+.price{
+  font-size: clamp(16px, 10cqw, 44px);
+  font-weight:1000;
+  color:#d0011b;
+}
+
+.before{
+  font-size: clamp(16px, 8cqw, 36px);
+  text-decoration:line-through;
+  font-weight:1000;
+  color:#999;
+  margin-left:0.4em;
+}
+
+.meta{
+  font-size: clamp(16px, 7cqw, 36px);
+  color:#666;
+  margin-top:0.8em;
+  margin-bottom:0.2em;   /* 👈 GIÃN XUỐNG DƯỚI */
+
+  display:flex;
+  flex-direction:column;
+  gap:0.4em;
+}
+
+/* ===== TO TOP BUTTON ===== */
+#toTop{
+  position:fixed;
+  bottom:32px;
+  right:32px;
+
+  width:150px;
+  height:150px;
+  border-radius:50%;
+
+  background:#1e71ff;
+  color:#fff;
+  border:none;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:120px;        /* 👈 GIẢM 1 CHÚT */
+  line-height:1;          /* 👈 QUAN TRỌNG */
+  cursor:pointer;
+  display:none;
+
+  box-shadow:0 10px 30px rgba(0,0,0,.3);
+  z-index:999;
+}
+
+
+#toTop:hover{
+  background:#d43c1f;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Flashsale Shopee</h1>
+
+<form class="panel" method="get">
+  <div class="grid-filter">
+
+    <div>
+      <label>Chọn khung giờ</label>
+      <select name="slot" onchange="this.form.submit()">
+        
+      </select>
+    </div>
+
+    <div>
+      <label>Tìm kiếm sản phẩm</label>
+      <input name="q" value="">
+    </div>
+
+    <div>
+      <label>Sắp xếp theo</label>
+      <select name="sort" onchange="this.form.submit()">
+        <option value="discount" selected>Theo phần trăm</option>
+        <option value="price_asc" >Giá tăng dần</option>
+        <option value="price_desc" >Giá giảm dần</option>
+      </select>
+    </div>
+
+    <div>
+      <label>Lọc theo</label>
+        <select name="filter" onchange="this.form.submit()">
+          <option value="all" >
+            Mọi sản phẩm
+          </option>
+          <option value="mall" selected>
+            Shop Mall
+          </option>
+          <option value="remove_1k" >
+            Bỏ Deal 1K
+          </option>
+          <option value="rating49" >
+            Trên 4.9⭐
+          </option>
+        </select>
+    </div>
+
+  </div>
+</form>
+
+<div class="grid">
+
+  <div class="card">
+    <div class="badge">-99%</div>
+    
+      <div class="shop-badge mall">Mall</div>
+    
+    <a href="https://shopee.vn/product/401304105/43723946055" target="_blank"><img src="https://cf.shopee.vn/file/vn-11134207-820l4-mfs66dmavbwv40"></a>
+    <div class="name">Sách: Kiến Tạo Dòng Chảy - Tối Ưu Hiệu Suất Tối Đa Thành Tích</div>
+    <div>
+      <span class="price">1,000₫</span>
+      <span class="before">72,000₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 100</div>
+      <div>    ⭐ 4.98/5 (108 đánh giá)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge">-97%</div>
+    
+      <div class="shop-badge mall">Mall</div>
+    
+    <a href="https://shopee.vn/product/549441275/22929498115" target="_blank"><img src="https://cf.shopee.vn/file/vn-11134207-7ra0g-m73d30u64n1d7a"></a>
+    <div class="name">Sách Những Câu Chuyện Truyền Cảm Hứng: Học Cách Yêu Thương - Bản màu</div>
+    <div>
+      <span class="price">1,000₫</span>
+      <span class="before">36,000₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 70</div>
+      <div>    ⭐ 4.88/5 (1686 đánh giá)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge">-95%</div>
+    
+      <div class="shop-badge mall">Mall</div>
+    
+    <a href="https://shopee.vn/product/1021396369/26173173856" target="_blank"><img src="https://cf.shopee.vn/file/vn-11134207-7ras8-m4u3r3e1eqyr23"></a>
+    <div class="name">Bút Bi Mực Gel Deli Thân Mờ Trong Suốt màu đen đỏ xanh ngòi 0.5mm viết trơn mực đều</div>
+    <div>
+      <span class="price">1,000₫</span>
+      <span class="before">20,000₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 30</div>
+      <div>    ⭐ 4.89/5 (5833 đánh giá)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge">-91%</div>
+    
+      <div class="shop-badge mall">Mall</div>
+    
+    <a href="https://shopee.vn/product/401304105/40553318381" target="_blank"><img src="https://cf.shopee.vn/file/vn-11134207-7ras8-mamivmmpv1lk96"></a>
+    <div class="name">Sách - Niềm Vui Công Việc - Bộ Công Cụ Này Hiệu Quả Duy Trì Niềm Vui Công Việc</div>
+    <div>
+      <span class="price">9,450₫</span>
+      <span class="before">105,000₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 100</div>
+      <div>    ⭐ 4.97/5 (107 đánh giá)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge">-71%</div>
+    
+      <div class="shop-badge mall">Mall</div>
+    
+    <a href="https://shopee.vn/product/500024302/29453106730" target="_blank"><img src="https://cf.shopee.vn/file/vn-11134207-7r98o-lxgg4js82lln94"></a>
+    <div class="name">( Loại 1)  Quạt tích điện kẹp bàn mini để bàn 5 mức độ có đèn led pin 5000 MHA Và 10000 MHA cao cấp</div>
+    <div>
+      <span class="price">63,510₫</span>
+      <span class="before">219,000₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 48</div>
+      <div>    ⭐ 4.5/5 (16734 đánh giá)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge">-46%</div>
+    
+      <div class="shop-badge mall">Mall</div>
+    
+    <a href="https://shopee.vn/product/254666730/20884333124" target="_blank"><img src="https://cf.shopee.vn/file/vn-11134207-7r98o-ly32cokctpllee"></a>
+    <div class="name">[Mã ELBSJBP03 giảm 12% đơn 500K] Bếp điện từ Elmich ICE 3879</div>
+    <div>
+      <span class="price">1,133,460₫</span>
+      <span class="before">2,099,000₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 30</div>
+      <div>    ⭐ 4.9/5 (1208 đánh giá)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge">-45%</div>
+    
+      <div class="shop-badge mall">Mall</div>
+    
+    <a href="https://shopee.vn/product/254666730/26913474088" target="_blank"><img src="https://cf.shopee.vn/file/vn-11134207-820l4-mhtypx4djmyue2"></a>
+    <div class="name">Bộ nồi inox nguyên khối Elmich Trimax EL-2136OL04 size 18, 20, 22 chảo 24cm</div>
+    <div>
+      <span class="price">1,974,500₫</span>
+      <span class="before">3,590,000₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 30</div>
+      <div>    ⭐ 4.9/5 (1148 đánh giá)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge">-35%</div>
+    
+      <div class="shop-badge mall">Mall</div>
+    
+    <a href="https://shopee.vn/product/98434606/40961818297" target="_blank"><img src="https://cf.shopee.vn/file/vn-11134207-820l4-mhpkb22gkrgh5e"></a>
+    <div class="name">Áo Sweater Thêu Len GUPO Tay Phồng Form Boxy Chất Nỉ Bông Dày Dặn Local Brand Unisex - SWT01</div>
+    <div>
+      <span class="price">227,500₫</span>
+      <span class="before">350,000₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 172</div>
+      <div>    ⭐ 4.91/5 (383 đánh giá)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge">-33%</div>
+    
+      <div class="shop-badge mall">Mall</div>
+    
+    <a href="https://shopee.vn/product/254666730/18763925802" target="_blank"><img src="https://cf.shopee.vn/file/vn-11134207-7r98o-ls31ghv0fkbd01"></a>
+    <div class="name">Quánh Inox nguyên khối Elmich baby EL-3848/2538IN14 size 14cm</div>
+    <div>
+      <span class="price">442,200₫</span>
+      <span class="before">660,000₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 30</div>
+      <div>    ⭐ 4.92/5 (3205 đánh giá)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge">-29%</div>
+    
+      <div class="shop-badge mall">Mall</div>
+    
+    <a href="https://shopee.vn/product/987373161/26753987726" target="_blank"><img src="https://cf.shopee.vn/file/sg-11134201-822xt-mi6uw73eyvwk7c"></a>
+    <div class="name">[LS][Chọn loại] Combo 2 Túi Nước Giặt Xả Chanté Cao Cấp 8 Trong 1</div>
+    <div>
+      <span class="price">205,190₫</span>
+      <span class="before">289,000₫</span>
+    </div>
+    <div class="meta">
+      <div> Kho 150</div>
+      <div>    ⭐ 4.92/5 (24287 đánh giá)</div>
+    </div>
+  </div>
+
+</div>
+
+<button id="toTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">▲</button>
+
+<script>
+const btn = document.getElementById("toTop");
+window.addEventListener("scroll", () => {
+  btn.style.display = window.scrollY > 400 ? "block" : "none";
+});
+</script>
+
+</body>
+</html>
