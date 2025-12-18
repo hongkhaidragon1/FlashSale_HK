@@ -264,14 +264,12 @@ input{
 <body>
 
 <h1>Flashsale Shopee</h1>
-
 <form class="panel" onsubmit="return false;">
   <div class="grid-filter">
 
     <div>
       <label>Chọn khung giờ</label>
       <select name="slot">
-        
       </select>
     </div>
 
@@ -282,7 +280,7 @@ input{
 
     <div>
       <label>Sắp xếp theo</label>
-      <select name="sort" onchange="this.form.submit()">
+      <select name="sort">
         <option value="discount" selected>Theo phần trăm</option>
         <option value="price_asc" >Giá tăng dần</option>
         <option value="price_desc" >Giá giảm dần</option>
@@ -8789,37 +8787,48 @@ window.addEventListener("scroll", () => {
 });
 </script>
 <script>
-(function () {
+(async function () {
 
-  // Ví dụ path:
-  // /18.12.2025-20.00/mall.html
+  const slotSelect   = document.querySelector("select[name='slot']");
+  const filterSelect = document.querySelector("select[name='filter']");
+  if (!slotSelect || !filterSelect) return;
+
   const parts = window.location.pathname.split("/").filter(Boolean);
-
   const currentSlot =
     parts.length >= 2 ? parts[parts.length - 2] : "";
-
   const currentFilter =
     parts.length >= 1
       ? parts[parts.length - 1].replace(".html", "")
       : "all";
 
-  const slotSelect   = document.querySelector("select[name='slot']");
-  const filterSelect = document.querySelector("select[name='filter']");
-
-  // set đúng trạng thái khi load page
-  if (slotSelect)   slotSelect.value   = currentSlot;
-  if (filterSelect) filterSelect.value = currentFilter;
-
-  function go() {
-    const slot   = slotSelect.value;
-    const filter = filterSelect.value;
-
-    const target = `../${slot}/${filter}.html`;
-    window.location.href = target;
+  // 👇 LOAD slots.json
+  let slots = [];
+  try {
+    const res = await fetch("../slots.json");
+    slots = await res.json();
+  } catch (e) {
+    console.error("Không load được slots.json", e);
+    return;
   }
 
-  if (slotSelect)   slotSelect.addEventListener("change", go);
-  if (filterSelect) filterSelect.addEventListener("change", go);
+  // build dropdown
+  for (const s of slots) {
+    const opt = document.createElement("option");
+    opt.value = s.file;
+    opt.textContent = s.label;
+    if (s.file === currentSlot) opt.selected = true;
+    slotSelect.appendChild(opt);
+  }
+
+  filterSelect.value = currentFilter;
+
+  function go() {
+    window.location.href =
+      `../${slotSelect.value}/${filterSelect.value}.html`;
+  }
+
+  slotSelect.addEventListener("change", go);
+  filterSelect.addEventListener("change", go);
 
 })();
 </script>
