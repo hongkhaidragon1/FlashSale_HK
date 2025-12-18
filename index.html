@@ -2,6 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>⚡ FlashSale Shopee</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -10,8 +11,8 @@
 *{box-sizing:border-box}
 html, body{
   font-size:16px;
-  height:100%;
-  overflow:hidden;   /* 👈 THÊM Ở ĐÂY */
+  margin:0;
+  padding:0;
 }
 body{
   font-family:"Manrope",sans-serif;
@@ -72,10 +73,10 @@ select,input{
 #viewer{
   width:100%;
   border:none;
-  min-height:100vh;
-  height:auto;
+  height:calc(100svh - 220px); /* 👈 svh, KHÔNG dùng vh */
   display:block;
 }
+
 </style>
 </head>
 
