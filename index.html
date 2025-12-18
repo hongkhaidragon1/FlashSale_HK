@@ -8,6 +8,11 @@
 
 <style>
 *{box-sizing:border-box}
+html, body{
+  font-size:16px;
+  height:100%;
+  overflow:hidden;   /* 👈 THÊM Ở ĐÂY */
+}
 body{
   font-family:"Manrope",sans-serif;
   background:#f5f5f5;
@@ -35,8 +40,10 @@ h1{
 
 .grid-filter{
   display:grid;
-  grid-template-columns:repeat(3,1fr); /* 👈 3 ô */
+  grid-template-columns:repeat(3,1fr);
   gap:12px;
+  align-items:stretch;        /* 👈 THÊM */
+  justify-items:start;        /* 👈 THÊM */
 }
 
 label{
@@ -53,10 +60,11 @@ select,input{
 }
 
 /* ===== MOBILE ===== */
-@media (max-width:768px){
-  h1{font-size:26px}
+@media (max-width:1024px){
   .grid-filter{
-    grid-template-columns:1fr; /* 👈 xếp dọc */
+    grid-template-columns:1fr;
+    align-items:flex-start;   /* 👈 THÊM */
+    justify-items:start;      /* 👈 THÊM */
   }
 }
 
@@ -64,8 +72,9 @@ select,input{
 #viewer{
   width:100%;
   border:none;
-  height:calc(100vh - 230px); /* 👈 VỪA MÀN HÌNH */
-  background:#f5f5f5;
+  min-height:100vh;
+  height:auto;
+  display:block;
 }
 </style>
 </head>
