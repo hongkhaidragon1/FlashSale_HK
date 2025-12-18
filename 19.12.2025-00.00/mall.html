@@ -3,6 +3,7 @@
 <html lang="vi">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>⚡ FlashSale Shopee</title>
 
 <!-- Manrope (gần giống Lazada / Euclid Circular A) -->
@@ -83,10 +84,7 @@ input{
 /* ===== PRODUCT GRID ===== */
 .grid{
   display:grid;
-  grid-template-columns: repeat(
-    6,
-    calc((100% - 5 * clamp(10px,1.5vw,16px)) / 6)
-  );
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   gap:clamp(10px,1.5vw,16px);
 }
 
