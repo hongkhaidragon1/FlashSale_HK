@@ -265,12 +265,12 @@ input{
 
 <h1>Flashsale Shopee</h1>
 
-<form class="panel" method="get">
+<form class="panel" onsubmit="return false;">
   <div class="grid-filter">
 
     <div>
       <label>Chọn khung giờ</label>
-      <select name="slot" onchange="this.form.submit()">
+      <select name="slot">
         
       </select>
     </div>
@@ -291,7 +291,7 @@ input{
 
     <div>
       <label>Lọc theo</label>
-        <select name="filter" onchange="this.form.submit()">
+        <select name="filter">
           <option value="all" >
             Mọi sản phẩm
           </option>
@@ -8819,6 +8819,41 @@ const btn = document.getElementById("toTop");
 window.addEventListener("scroll", () => {
   btn.style.display = window.scrollY > 400 ? "block" : "none";
 });
+</script>
+<script>
+(function () {
+
+  // Ví dụ path:
+  // /18.12.2025-20.00/mall.html
+  const parts = window.location.pathname.split("/").filter(Boolean);
+
+  const currentSlot =
+    parts.length >= 2 ? parts[parts.length - 2] : "";
+
+  const currentFilter =
+    parts.length >= 1
+      ? parts[parts.length - 1].replace(".html", "")
+      : "all";
+
+  const slotSelect   = document.querySelector("select[name='slot']");
+  const filterSelect = document.querySelector("select[name='filter']");
+
+  // set đúng trạng thái khi load page
+  if (slotSelect)   slotSelect.value   = currentSlot;
+  if (filterSelect) filterSelect.value = currentFilter;
+
+  function go() {
+    const slot   = slotSelect.value;
+    const filter = filterSelect.value;
+
+    const target = `../${slot}/${filter}.html`;
+    window.location.href = target;
+  }
+
+  if (slotSelect)   slotSelect.addEventListener("change", go);
+  if (filterSelect) filterSelect.addEventListener("change", go);
+
+})();
 </script>
 
 </body>
