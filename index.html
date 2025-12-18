@@ -1,11 +1,36 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <title>FlashSale HK</title>
+  <meta charset="utf-8">
+  <title>FlashSale Shopee</title>
 </head>
+
 <body>
-  <h1>FlashSale HK 🚀</h1>
-  <p>Website đã hoạt động!</p>
+  <h1>FlashSale Shopee</h1>
+
+  <label>Khung giờ</label>
+  <select id="slot">
+    <option value="18.12.2025-17.00">17:00</option>
+    <option value="18.12.2025-19.00">19:00</option>
+  </select>
+
+  <label>Lọc</label>
+  <select id="filter">
+    <option value="all.html">Tất cả</option>
+    <option value="mall.html">Mall</option>
+    <option value="rating49.html">Trên 4.9⭐</option>
+    <option value="remove_1k.html">Bỏ 1K</option>
+  </select>
+
+  <br><br>
+  <button onclick="go()">Xem</button>
+
+  <script>
+    function go() {
+      const slot = document.getElementById("slot").value;
+      const filter = document.getElementById("filter").value;
+      window.location.href = `/${slot}/${filter}`;
+    }
+  </script>
 </body>
 </html>
