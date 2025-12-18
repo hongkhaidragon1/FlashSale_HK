@@ -265,12 +265,12 @@ input{
 
 <h1>Flashsale Shopee</h1>
 
-<form class="panel" method="get">
+<form class="panel" onsubmit="return false;">
   <div class="grid-filter">
 
     <div>
       <label>Chọn khung giờ</label>
-      <select name="slot" onchange="this.form.submit()">
+      <select id="slot" onchange="go()">
         
       </select>
     </div>
@@ -291,7 +291,7 @@ input{
 
     <div>
       <label>Lọc theo</label>
-        <select name="filter" onchange="this.form.submit()">
+        <select id="filter" onchange="go()">
           <option value="all" >
             Mọi sản phẩm
           </option>
@@ -19792,6 +19792,14 @@ const btn = document.getElementById("toTop");
 window.addEventListener("scroll", () => {
   btn.style.display = window.scrollY > 400 ? "block" : "none";
 });
+</script>
+
+<script>
+function go(){
+  const slot = document.getElementById("slot").value;
+  const filter = document.getElementById("filter").value;
+  window.location.href = `/${slot}/${filter}.html`;
+}
 </script>
 
 </body>
