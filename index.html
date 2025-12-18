@@ -9,22 +9,22 @@
 
 <style>
 *{box-sizing:border-box}
-html, body{
-  font-size:16px;
+html,body{
   margin:0;
   padding:0;
+  font-size:16px;
 }
 body{
   font-family:"Manrope",sans-serif;
   background:#f5f5f5;
-  margin:0;
   padding:12px;
 }
 
+/* ===== TITLE ===== */
 h1{
   text-align:center;
   color:#ee4d2d;
-  font-size:32px;
+  font-size:clamp(22px,4vw,32px);
   margin-bottom:12px;
 }
 
@@ -34,17 +34,21 @@ h1{
   padding:12px;
   border-radius:12px;
   margin-bottom:12px;
-  max-width:1200px;
+  max-width:2000px;
   margin-left:auto;
   margin-right:auto;
 }
 
+/* Desktop: ngang | Mobile: dọc */
 .grid-filter{
   display:grid;
   grid-template-columns:repeat(3,1fr);
   gap:12px;
-  align-items:stretch;        /* 👈 THÊM */
-  justify-items:start;        /* 👈 THÊM */
+}
+
+.filter-item{
+  display:flex;
+  flex-direction:column;
 }
 
 label{
@@ -52,31 +56,29 @@ label{
   margin-bottom:6px;
 }
 
-select,input{
+select,
+input{
   width:100%;
   padding:10px 12px;
   font-size:16px;
   border:1px solid #dcdcdc;
   border-radius:10px;
+  outline:none;
 }
 
 /* ===== MOBILE ===== */
-@media (max-width:1024px){
+@media (max-width:900px){
   .grid-filter{
     grid-template-columns:1fr;
-    align-items:flex-start;   /* 👈 THÊM */
-    justify-items:start;      /* 👈 THÊM */
   }
 }
 
-/* ===== IFRAME ===== */
+/* ===== CONTENT ===== */
 #viewer{
-  width:100%;
-  border:none;
-  height:calc(100svh - 220px); /* 👈 svh, KHÔNG dùng vh */
-  display:block;
+  max-width:1200px;
+  margin-left:auto;
+  margin-right:auto;
 }
-
 </style>
 </head>
 
@@ -87,12 +89,12 @@ select,input{
 <div class="panel">
   <div class="grid-filter">
 
-    <div>
+    <div class="filter-item">
       <label>Chọn khung giờ</label>
       <select id="slot" onchange="loadPage()"></select>
     </div>
 
-    <div>
+    <div class="filter-item">
       <label>Lọc theo</label>
       <select id="filter" onchange="loadPage()">
         <option value="all.html">Mọi sản phẩm</option>
@@ -102,19 +104,25 @@ select,input{
       </select>
     </div>
 
-    <div>
+    <div class="filter-item">
       <label>Tìm kiếm</label>
-      <input id="q" placeholder="Nhập tên sản phẩm..." onkeyup="delaySearch()">
+      <input
+        id="q"
+        placeholder="Nhập tên sản phẩm..."
+        onkeyup="delaySearch()"
+      >
     </div>
 
   </div>
 </div>
 
-<iframe id="viewer"></iframe>
+<div id="viewer"></div>
 
 <script>
 let searchTimer = null;
+let cachedHTML = "";
 
+/* ===== INIT ===== */
 async function init(){
   const res = await fetch("/slots.json");
   const slots = await res.json();
@@ -133,20 +141,52 @@ async function init(){
   loadPage();
 }
 
-function loadPage(){
+/* ===== LOAD HTML FRAGMENT ===== */
+async function loadPage(){
   const slot = document.getElementById("slot").value;
   const filter = document.getElementById("filter").value;
-  const q = document.getElementById("q").value.trim();
 
-  let url = `/${slot}/${filter}`;
-  if(q) url += `?q=${encodeURIComponent(q)}`;
+  notedLoading();
 
-  document.getElementById("viewer").src = url;
+  const res = await fetch(`/${slot}/${filter}`);
+  cachedHTML = await res.text();
+
+  document.getElementById("viewer").innerHTML = cachedHTML;
+  applySearch();
+
+  window.scrollTo({top:0,behavior:"smooth"});
 }
 
+/* ===== SEARCH ===== */
 function delaySearch(){
   clearTimeout(searchTimer);
-  searchTimer = setTimeout(loadPage, 400);
+  searchTimer = setTimeout(applySearch, 300);
+}
+
+function applySearch(){
+  const q = document.getElementById("q")
+            .value
+            .toLowerCase()
+            .trim();
+
+  document
+    .querySelectorAll("#viewer .card")
+    .forEach(card=>{
+      const name = card
+        .querySelector(".name")
+        .innerText
+        .toLowerCase();
+
+      card.style.display = name.includes(q)
+        ? ""
+        : "none";
+    });
+}
+
+/* ===== OPTIONAL LOADING PLACEHOLDER ===== */
+function notedLoading(){
+  document.getElementById("viewer").innerHTML =
+    "<div style='padding:40px;text-align:center;color:#999'>Đang tải...</div>";
 }
 
 init();
