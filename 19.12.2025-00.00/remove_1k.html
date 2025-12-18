@@ -60,7 +60,7 @@ h1{
 }
 
 label{
-  font-size:1.2vw;        /* 👈 to gấp đôi */
+  font-size:16px;        /* 👈 to gấp đôi */
   margin-bottom:8px;
   text-align:left;
 }
@@ -72,7 +72,7 @@ input{
   );                    /* 👈 = 2 card */
 
   padding: 0.6em 0.8em; /* 👈 chiều cao theo chữ */
-  font-size: 1.2cqw;      /* 👈 chữ scale theo khung */
+  font-size: 16px;      /* 👈 chữ scale theo khung */
 
   border:1px solid #dcdcdc;
   border-radius:10px;
@@ -84,8 +84,8 @@ input{
 /* ===== PRODUCT GRID ===== */
 .grid{
   display:grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap:clamp(10px,1.5vw,16px);
+  grid-template-columns:repeat(auto-fill, minmax(180px, 1fr));
+  gap:12px;
 }
 
 
@@ -93,27 +93,28 @@ input{
 @media (max-width:1024px){
 
   .panel{
-    width: 100%;
+    width:100%;
   }
 
   .grid{
-    width: 100%;
+    width:100%;
     grid-template-columns:repeat(2,1fr);
   }
 
   .grid-filter{
     grid-template-columns:1fr;
+    align-items:flex-start;
   }
 
   select,
   input{
-    width: 100%;          /* 👈 QUAN TRỌNG */
-    font-size: 3rem;      /* chỉnh chữ tại đây */
-    padding: 0.7em 0.9em;
+    width:100%;
+    font-size:16px;      /* 👈 CỐ ĐỊNH, KHÔNG SCALE */
+    padding:12px 14px;
   }
 
   label{
-    font-size: 3rem;    /* chỉnh label tại đây */
+    font-size:14px;     /* 👈 nhỏ hơn input */
   }
 }
 
@@ -130,7 +131,6 @@ input{
   aspect-ratio:3 / 4.2;         /* cao hơn chút như bạn yêu cầu */
   display:flex;
   flex-direction:column;
-  container-type:inline-size;
   border:3px solid #000;  
   transition:
     transform 0.25s ease,
@@ -166,7 +166,7 @@ input{
   left:8px;
   background:#e60000;
   color:#fff;
-  font-size:8cqw;
+  font-size:14px;
   padding:0.25em 0.4em;
   border-radius:6px;
 }
@@ -175,7 +175,7 @@ input{
   position:absolute;
   top:8px;
   right:8px;
-  font-size:6cqw;
+  font-size:12px;
   padding:0.25em 0.5em;
   border-radius:6px;
   font-weight:700;
@@ -195,7 +195,7 @@ input{
 /* ===== TEXT TRONG SẢN PHẨM SCALE THEO CHIỀU RỘNG KHUNG ===== */
 
 .name{
-  font-size: clamp(16px, 8cqw, 36px);   /* ≈ 1/20 chiều rộng */
+  font-size: clamp(16px, 4vw, 36px);   /* ≈ 1/20 chiều rộng */
   line-height:1.25;
   margin:0.6em 0 0.8em;
   height:2.6em;                         /* khóa 2 dòng */
@@ -204,13 +204,13 @@ input{
 }
 
 .price{
-  font-size: clamp(16px, 10cqw, 44px);
+  font-size: clamp(16px, 5vw, 44px);
   font-weight:1000;
   color:#d0011b;
 }
 
 .before{
-  font-size: clamp(16px, 8cqw, 36px);
+  font-size: clamp(16px, 4vw, 36px);
   text-decoration:line-through;
   font-weight:1000;
   color:#999;
@@ -218,7 +218,7 @@ input{
 }
 
 .meta{
-  font-size: clamp(16px, 7cqw, 36px);
+  font-size: clamp(16px, 3.5vw, 36px);
   color:#666;
   margin-top:0.8em;
   margin-bottom:0.2em;   /* 👈 GIÃN XUỐNG DƯỚI */
